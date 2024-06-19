@@ -1,26 +1,24 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Navbar from "../Shared/Navbar/Navbar";
 import { useContext } from "react";
 import { AUthContext } from "../../providers/AuthProviders";
 
-const Login = () => {
-  const { signIn } = useContext(AUthContext);
-  const location = useLocation();
-  console.log("location in the login page", location);
-  const navigate = useNavigate();
-  const handleLogin = (e) => {
+const Register = () => {
+  const { createUser } = useContext(AUthContext);
+  const handleRegister = (e) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
+    const name = form.get("name");
+    const photo = form.get("photo");
     const email = form.get("email");
     const password = form.get("password");
     console.log(e.currentTarget);
-    console.log(email, password);
-    //login
-    signIn(email, password)
+    console.log(name, photo, email, password);
+
+    //create user
+    createUser(email, password)
       .then((result) => {
         console.log(result.user);
-        // navigate user after login
-        navigate(location?.state ? location.state : "/");
       })
       .catch((error) => {
         console.log(error);
@@ -30,8 +28,32 @@ const Login = () => {
     <div>
       <Navbar></Navbar>
       <div className="">
-        <h2 className="text-3xl my-10 text-center">Please login</h2>
-        <form onSubmit={handleLogin} className="md:w-3/4 lg:w-1/2 mx-auto">
+        <h2 className="text-3xl my-10 text-center">Please Register</h2>
+        <form onSubmit={handleRegister} className="md:w-3/4 lg:w-1/2 mx-auto">
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Name</span>
+            </label>
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              className="input input-bordered"
+              required
+            />
+          </div>
+          <div className="form-control">
+            <label className="label">
+              <span className="label-text">Photo URL</span>
+            </label>
+            <input
+              type="text"
+              name="photo"
+              placeholder="Photo URL"
+              className="input input-bordered"
+              required
+            />
+          </div>
           <div className="form-control">
             <label className="label">
               <span className="label-text">Email</span>
@@ -62,13 +84,13 @@ const Login = () => {
             </label>
           </div>
           <div className="form-control mt-6">
-            <button className="btn btn-primary">Login</button>
+            <button className="btn btn-primary">Register</button>
           </div>
         </form>
         <p className="text-center">
-          Do not have an account? Please register
-          <Link className="text-blue-500 font-bold" to="/register">
-            Register
+          Already have an account? Please login
+          <Link className="text-blue-500 font-bold" to="/login">
+            Login
           </Link>
         </p>
       </div>
@@ -76,4 +98,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
